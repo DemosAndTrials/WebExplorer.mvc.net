@@ -21,6 +21,13 @@ namespace WebExplorer.Models
             set { _path = value; }
         }
 
+        private string _url;
+        public string Url
+        {
+            get { return _url; }
+            set { _url = value; }
+        }
+
         private bool _isFile;
         public bool IsFile
         {
