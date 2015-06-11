@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebExplorer.Models;
 
 namespace WebExplorer.Controllers
 {
@@ -10,7 +11,9 @@ namespace WebExplorer.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            ExplorerViewModel model = new ExplorerViewModel();
+
+            return View(model);
         }
 
         public ActionResult About()
