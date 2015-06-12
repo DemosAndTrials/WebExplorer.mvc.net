@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using WebExplorer.Helpers;
 
 namespace WebExplorer.Models
 {
@@ -11,7 +12,6 @@ namespace WebExplorer.Models
         // const fields
         private const string PATHROOT = "CatalogOutput\\Products\\";
         private const string URLROOT = "/CatalogOutput/Products/";
-
 
         // fields
         private string _rootPath { get; set; }
@@ -22,9 +22,11 @@ namespace WebExplorer.Models
         public ExplorerViewModel()
         {
             this._rootPath = HttpContext.Current.Server.MapPath("~/") + PATHROOT;
-            this._rootUrl = HttpContext.Current.Request.Url.Scheme + System.Uri.SchemeDelimiter + HttpContext.Current.Request.Url.Host
-                //+ (HttpContext.Current.Request.Url.IsDefaultPort ? "" : ":" + HttpContext.Current.Request.Url.Port)  // for localhost use
-                          + URLROOT;
+            this._rootUrl = HttpContext.Current.Request.Url.Scheme 
+                            + System.Uri.SchemeDelimiter 
+                            + HttpContext.Current.Request.Url.Host
+                            //+ (HttpContext.Current.Request.Url.IsDefaultPort ? "" : ":" + HttpContext.Current.Request.Url.Port)  // for localhost use
+                            + URLROOT;
             Items = new List<ExplorerItem>();
 
             if (!Directory.Exists(this._rootPath))
@@ -33,21 +35,43 @@ namespace WebExplorer.Models
             GetAllFiles();
         }
 
+        /// <summary>
+        /// Get all files in root directory
+        /// </summary>
         private void GetAllFiles()
         {
 
             // get all files
-
             var files = Directory.GetFiles(this._rootPath);
             foreach (var file in files)
             {
-                string name = Path.GetFileName(file);
+                FileInfo f = new FileInfo(file);
+              
                 ExplorerItem item = new ExplorerItem();
-                item.Name = name;
+                item.Name = f.Name;
                 item.Path = file;
-                item.Url = _rootUrl + name;
+                item.Url = _rootUrl + f.Name;
+                item.Size = Utils.BytesToString(f.Length);
+                item.ModifiedDate = f.LastWriteTime.ToString("dd/MM/yyyy HH:mm");
                 item.IsFile = true;
                 Items.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// Delete file
+        /// </summary>
+        /// <param name="path">file path</param>
+        public bool Delete(string path)
+        {
+            try
+            {
+                File.Delete(path);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 

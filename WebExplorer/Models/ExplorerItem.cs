@@ -28,6 +28,20 @@ namespace WebExplorer.Models
             set { _url = value; }
         }
 
+        private string _size;
+        public string Size
+        {
+            get { return _size; }
+            set { _size = value; }
+        }
+
+        private string _modifiedDate;
+        public string ModifiedDate
+        {
+            get { return _modifiedDate; }
+            set { _modifiedDate = value; }
+        }
+
         private bool _isFile;
         public bool IsFile
         {

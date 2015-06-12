@@ -16,6 +16,22 @@ namespace WebExplorer.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteComment(string itemId)
+        {
+            ExplorerViewModel model = new ExplorerViewModel();
+            try
+            {
+                model.Delete(itemId);
+            }
+            catch (Exception)
+            {
+
+            }
+            return RedirectToAction("Index");
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
